@@ -1,0 +1,21 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Generated 3D scene</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.1/dist/mindar-image-aframe.prod.js"></script>
+        </head>
+        <body>
+          <a-scene mindar-image="imageTargetSrc: https://cdn.glitch.global/498d41f2-6514-47d1-ab34-1dc0747fe6e7/targets.mind?v=1685561703269;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+            <a-assets>
+              <a-asset-item id="model" src="https://cdn.glitch.global/498d41f2-6514-47d1-ab34-1dc0747fe6e7/nosorog.glb?v=1685561767991"></a-asset-item>
+              <img id="image" src="https://github.com/Boks-Boks/FileUpload/blob/main/uploads/360DINO.jpg" />
+            </a-assets>
+            <a-entity gltf-model="#model" position="0 1.5 -5"></a-entity>
+            <img src="#image" position="1 1 -3" rotation="0 0 0" height="2" width="2">
+          </a-scene>
+        </body>
+        </html>
+      
