@@ -1,0 +1,23 @@
+
+         <!DOCTYPE html>
+ <html>
+   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <!-- we import arjs version without NFT but with marker + location based support -->
+   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+   <body style="margin : 0px; overflow: hidden;">
+     <a-scene embedded arjs>
+       <a-marker preset="hiro">
+  
+         <a-assets>
+              <a-asset-item id="model" src="https://github.com/Boks-Boks/FileUpload/blob/main/uploads/polykljuc.glb"></a-asset-item>
+              <img id="image" src="https://cdn.glitch.global/97509362-a202-48e7-93be-d3659a5baca2/AnnaJack.jpeg?v=1719300253695" />
+            </a-assets>
+            <a-marker preset="hiro">
+              <a-entity gltf-model="#model" position="0 1.5 -5"></a-entity>
+              <img src="#image" position="1 1 -3" rotation="0 0 0" height="2" width="2">
+            </a-marker>
+            <a-entity camera></a-entity>
+          </a-scene>
+        </body>
+        </html>
+      
