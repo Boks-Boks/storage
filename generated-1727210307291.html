@@ -1,0 +1,32 @@
+
+         <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Content</title>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <!-- AR.js for marker-based AR -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body>
+    <a-scene embedded arjs>
+      <a-marker type="pattern" url="https://cdn.glitch.global/2cd3eb4b-5906-4026-b02f-7300767e280a/MarkerARPage.patt?v=1719743997291">
+        <a-video src="https://raw.githubusercontent.com/Boks-Boks/FileUpload/main/uploads/hands_-_552 (360p).mp4"
+                 scale="1 1 1"
+                 position="0 0 0"
+                 width="10"
+                 height="10"
+                 rotation="-90 0 0"
+                 autoplay="true"
+                 loop="true"
+                 class="clickable"
+                 gesture-handler
+                 opacity="1"></a-video>
+        <!-- a-image src="https://raw.githubusercontent.com/Boks-Boks/FileUpload/main/uploads/MariaHenryGiftShop.png" -->
+      </a-marker>
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>
+      
