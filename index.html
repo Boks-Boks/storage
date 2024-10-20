@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR.js Marker Training</title>
+    <!-- Include Material Design Lite (MDL) -->
+    <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+    <link rel='stylesheet' href='https://code.getmdl.io/1.3.0/material.indigo-pink.min.css'>
+    <script defer src='https://code.getmdl.io/1.3.0/material.min.js'></script>
+    <script src='threex.js'></script> <!-- Ensure this path is correct -->
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8d3be;
+        }
+        h1 {
+            text-align: center;
+            font-size: 500%;
+        }
+      
+      #imageContainer {
+            display: flex;
+            justify-content: center; /* Center the contents */
+            align-items: center; /* Align items vertically (optional) */
+            margin-top: 20px; /* Add some space above the marker */
+        }
+      
+        #imageContainer img {
+            width: 100%;
+            max-width: 512px;
+        }
+        /* Custom styles for buttons */
+        .upload-button {
+            background-color: #4CAF50; /* Green */
+            color: white;              /* White text */
+            margin: 10px 0;           /* Add vertical margin for spacing */
+        }
+
+        .upload-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        .download-button {
+            background-color: #2196F3; /* Blue */
+            color: white;              /* White text */
+            margin: 10px 0;           /* Add vertical margin for spacing */
+        }
+
+        .download-button:hover {
+            background-color: #0b7dda; /* Darker blue on hover */
+        }
+
+        /* Center the button container */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center horizontally */
+            justify-content: center; /* Center vertically */
+            height: 100%; /* Allow vertical centering */
+        }
+
+        /* Center the button grid */
+        .mdl-grid {
+            justify-content: center; /* Center the grid content */
+            margin-top: 20px; /* Add some space between h1 and buttons */
+        }
+
+        /* Hide the sliders */
+        .hidden-slider {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Create AR Marker</h1>
+
+<div class='mdl-grid'>
+    <div class='mdl-cell mdl-cell--4-col'>
+        <div class="button-container">
+            <label id='buttonUpload' for='fileinput' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect upload-button'>
+                <input type='file' id='fileinput' style='display: none'>
+                Upload
+            </label>
+            <div class='mdl-tooltip' for='buttonUpload'>
+                Upload Image on Marker
+            </div>
+
+            <button id='buttonDownloadEncoded' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect download-button'>
+                Download Marker 
+            </button>
+            <div class='mdl-tooltip' for='buttonDownloadEncoded'>
+                Download Marker Pattern
+            </div>
+
+            <button id='buttonDownloadFullImage' class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect download-button'>
+                Download Image
+            </button>
+            <div class='mdl-tooltip' for='buttonDownloadFullImage'>
+                Download Marker as Image
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='mdl-grid'>
+    <div class='mdl-cell mdl-cell--3-col'></div>
+    <div class='mdl-cell mdl-cell--6-col'>
+        <div id='imageContainer'></div>
+    </div>
+    <div class='mdl-cell mdl-cell--3-col'></div>
+</div>
+
+<script>
+    var innerImageURL = null;
+    var fullMarkerURL = null;
+    var imageName = null;
+
+    // Fixed values for Pattern Ratio and Image Size
+    const fixedPatternRatio = 0.5; // Always 0.5
+    const fixedImageSize = 512; // Always 512
+
+    document.querySelector('#fileinput').addEventListener('change', function() {
+        var file = this.files[0];
+        imageName = file.name;
+        imageName = imageName.substring(0, imageName.lastIndexOf('.')) || imageName;
+
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            innerImageURL = event.target.result;
+            updateFullMarkerImage();
+        };
+        reader.readAsDataURL(file);
+    });
+
+    document.querySelector('#buttonDownloadEncoded').addEventListener('click', function() {
+        if (innerImageURL === null) {
+            alert('Upload a file first');
+            return;
+        }
+        console.assert(innerImageURL);
+        THREEx.ArPatternFile.encodeImageURL(innerImageURL, function onComplete(patternFileString) {
+            THREEx.ArPatternFile.triggerDownload(patternFileString, "pattern-" + (imageName || "marker") + ".patt");
+        });
+    });
+
+    document.querySelector('#buttonDownloadFullImage').addEventListener('click', function() {
+        if (innerImageURL === null) {
+            alert('Upload a file first');
+            return;
+        }
+        
+        var domElement = document.createElement('a');
+        domElement.href = fullMarkerURL;
+        domElement.download = "pattern-" + (imageName || 'marker') + '.png';
+        document.body.appendChild(domElement);
+        domElement.click();
+        document.body.removeChild(domElement);
+    });
+
+    function updateFullMarkerImage() {
+        if (!innerImageURL) return; // Exit if there is no image
+
+        var borderColor = document.querySelector('#borderColor') ? document.querySelector('#borderColor').value : 'black';
+        var s = new Option().style;
+        s.color = borderColor;
+        if (borderColor === '' || (s.color != borderColor && !/^#[0-9A-F]{6}$/i.test(borderColor))) {
+            borderColor = 'black';
+        }
+
+        // Build the marker with fixed values
+        THREEx.ArPatternFile.buildFullMarker(innerImageURL, fixedPatternRatio, fixedImageSize, borderColor, function onComplete(markerUrl) {
+            fullMarkerURL = markerUrl;
+
+            var fullMarkerImage = document.createElement('img');
+            fullMarkerImage.src = fullMarkerURL;
+
+            // Display the marker in the container
+            var container = document.querySelector('#imageContainer');
+            while (container.firstChild) container.removeChild(container.firstChild);
+            container.appendChild(fullMarkerImage);
+        });
+    }
+</script>
+
+</body>
+</html>
