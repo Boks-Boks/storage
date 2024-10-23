@@ -1,0 +1,146 @@
+
+         <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>The AR Business Card</title>
+    <meta name="description" content="AR.js Business Card" />
+    <meta name="author" content="Bojan Tadic" />
+
+    <!-- A-Frame and AR.js scripts -->
+    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.0/aframe/build/aframe-ar.js"></script>
+
+    <script>
+      AFRAME.registerComponent("navigate-on-click", {
+        schema: {
+          url: { default: "" },
+        },
+        init: function () {
+          var data = this.data;
+          var el = this.el;
+          el.addEventListener("click", function () {
+            console.log("Element clicked, navigating to: ", data.url);
+            window.location.href = data.url; // Direct navigation
+          });
+        },
+      });
+    </script>
+  </head>
+
+  <body style="margin: 0; overflow: hidden">
+    <a-scene
+      embedded
+      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false; vr-mode-ui=enabled: false"
+    >
+      <!-- Assets (icons) -->
+      <a-assets>
+        <img
+          id="github_icon"
+          src="https://cdn3.iconfinder.com/data/icons/social-media-2169/24/social_media_social_media_logo_github-512.png"
+        />
+        <img
+          id="insta_icon"
+          src="https://cdn3.iconfinder.com/data/icons/social-media-2169/24/social_media_social_media_logo_instagram-512.png"
+        />
+        <img
+          id="linkedin_icon"
+          src="https://cdn3.iconfinder.com/data/icons/social-media-2169/24/social_media_social_media_logo_likedin-512.png"
+        />
+        <img
+          id="facebook_icon"
+          src="https://cdn3.iconfinder.com/data/icons/social-media-2169/24/social_media_social_media_logo_facebook-512.png"
+        />
+      </a-assets>
+
+      <!-- Business Card Background -->
+      <a-plane
+        rotation="-90 0 0"
+        color="transparent"
+        opacity="0"
+        width="2"
+        height="2"
+      >
+        <a-image
+          src="https://raw.githubusercontent.com/Boks-Boks/FileUpload/main/uploads/VISIT CARD(5).png"
+          position="2.059 0.441 0"
+          scale="2.2 3.5 2"
+          width="2"
+          height="1"
+        ></a-image>
+      </a-plane>
+
+      <!-- Social Media Icons -->
+      <a-plane
+        position="0 0 0.8"
+        color="transparent"
+        opacity="0"
+        width="3"
+        height="1"
+        rotation="-90 0 0"
+      >
+        <a-plane
+          id="gth"
+          src="https://raw.githubusercontent.com/Boks-Boks/FileUpload/main/uploads/paragliding-instructor-women(1).png"
+          position="1.910 4.096 0.041"
+          scale="1 1 1"
+          depth="0.15"
+          height="1.5"
+          width="1.5"
+          navigate-on-click=""
+        >
+        </a-plane>
+
+        <a-plane
+          id="lkd"
+          src="https://raw.githubusercontent.com/Boks-Boks/FileUpload/main/uploads/medal-first-place.png"
+          position="-1.346 0.321 0"
+          scale="1 1 1"
+          depth="0.15"
+          height="1.5"
+          width="1.5"
+          navigate-on-click=""
+        >
+        </a-plane>
+
+        <a-plane
+          id="fcb"
+          src="https://raw.githubusercontent.com/Boks-Boks/FileUpload/main/uploads/Social-Media-Logo.jpg"
+          position="2.079 -1.875 0"
+          scale="0.700 2.1 1"
+          depth="0.15"
+          height="1"
+          width="6"
+          navigate-on-click="url: https://www.linkedin.com"
+        >
+        </a-plane>
+        
+        <a-plane
+          id="ins"
+          src="https://raw.githubusercontent.com/Boks-Boks/FileUpload/main/uploads/VISIT CARD(3).png"
+          position="-1.340 2.455 0"
+          depth="0.15"
+          height="1.5"
+          width="1.5"
+          navigate-on-click=""
+        >
+        </a-plane>
+
+        
+      </a-plane>
+
+      <!-- Camera with Raycaster for Interaction -->
+      <a-entity camera look-controls>
+        <a-entity
+          cursor="fuse:false; rayOrigin: mouse"
+          raycaster="objects: a-plane"
+        ></a-entity>
+      </a-entity>
+
+      <a-marker-camera type="pattern" url="https://cdn.glitch.global/2cd3eb4b-5906-4026-b02f-7300767e280a/MarkerARPage.patt?v=1719743997291"></a-marker-camera>
+
+    </a-scene>
+  </body>
+</html>
+
+      
